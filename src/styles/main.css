@@ -1,0 +1,94 @@
+/* Variables CSS globales */
+:root {
+  --primary: #1976D2;
+  --secondary: #2E7D32;
+  --background: #F5F5F5;
+  --text-primary: rgba(0, 0, 0, 0.87);
+  --text-secondary: rgba(0, 0, 0, 0.6);
+}
+
+/* Estilos base */
+html {
+  overflow-y: auto !important;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--background);
+  margin: 0;
+  padding: 0;
+}
+
+/* Utilidades */
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text-truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Animaciones */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Personalizaciones de Vuetify */
+.v-application {
+  [class*='text-'] {
+    font-family: 'Roboto', sans-serif !important;
+  }
+}
+
+.v-btn {
+  text-transform: none !important;
+  letter-spacing: 0.5px !important;
+}
+
+.v-card {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.v-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .v-container {
+    padding: 12px !important;
+  }
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #666;
+} 
