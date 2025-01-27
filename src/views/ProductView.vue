@@ -100,22 +100,23 @@
             </v-list>
 
             <!-- Acciones -->
-            <div class="d-flex gap-2">
+            <div class="d-flex align-center justify-space-between gap-4 mt-4">
               <v-btn
                 color="primary"
                 size="x-large"
-                block
+                min-width="200"
                 @click="handleAddToCart"
                 :disabled="!isAuthenticated || product.stock <= 0"
                 class="flex-grow-1"
               >
-                <v-icon start>mdi-cart-plus</v-icon>
+                <v-icon start class="mr-2">mdi-cart-plus</v-icon>
                 {{ getAddToCartButtonText }}
               </v-btn>
 
               <v-btn
                 color="primary"
                 size="x-large"
+                width="64"
                 variant="outlined"
                 @click="showShippingForm = true"
                 :disabled="product.stock <= 0"
