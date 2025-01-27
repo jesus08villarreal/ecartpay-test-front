@@ -1,35 +1,87 @@
-# Vue.js
+# EcartPay - Frontend
 
-This directory is a brief example of a [Vue.js](https://vuejs.org/) app that can be deployed to Vercel with zero configuration.
+Frontend de la aplicación EcartPay, una plataforma de comercio electrónico desarrollada con Vue.js y Vuetify.
 
-## Deploy Your Own
+## Características
 
-Deploy your own Vue.js project with Vercel.
+- 🛍️ Catálogo de productos
+- 🛒 Carrito de compras
+- 🚚 Integración con API de envíos
+- 👤 Autenticación de usuarios
+- 💳 Proceso de checkout
+- 📱 Diseño responsive
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/examples/tree/main/framework-boilerplates/vue&template=vue)
+## Requisitos Previos
 
-_Live Example: https://vue-template.vercel.app_
+- Node.js (v14 o superior)
+- NPM (v6 o superior)
 
-## Running Locally
+## Instalación
 
+1. Clona el repositorio:
+```bash
+git clone https://github.com/tu-usuario/ecartpay-test-front.git
+cd ecartpay-test-front
 ```
+
+2. Instala las dependencias:
+```bash
 npm install
 ```
 
-#### Compile and hot-reload for development
+## Scripts Disponibles
 
-```
+### Desarrollo
+```bash
 npm run serve
 ```
+Inicia el servidor de desarrollo en `http://localhost:8080`
 
-#### Compile and minify for production
-
-```
+### Producción
+```bash
 npm run build
 ```
+Genera los archivos de producción en la carpeta `dist`
 
-#### Lint and fix files
-
-```
+### Linting
+```bash
 npm run lint
 ```
+Ejecuta el linter y corrige errores automáticamente
+
+## Variables de Entorno
+
+Crea un archivo `.env` en la raíz del proyecto con las siguientes variables:
+
+```env
+VUE_APP_API_URL=tu_url_api
+VUE_APP_ENVIA_API_KEY=tu_api_key_envia
+```
+
+## Tecnologías Principales
+
+- Vue.js 3
+- Vuex (manejo de estado)
+- Vue Router
+- Vuetify 3
+- Axios
+
+## Despliegue
+
+El proyecto está configurado para desplegarse en Vercel. Cada push a la rama principal activará un nuevo despliegue automáticamente.
+
+## Estructura del Proyecto
+
+```
+src/
+├── assets/        # Recursos estáticos
+├── components/    # Componentes Vue
+├── router/        # Configuración de rutas
+├── store/         # Estado global (Vuex)
+├── services/      # Servicios y APIs
+├── views/         # Vistas principales
+└── App.vue        # Componente raíz
+```
+## Licencia
+
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
