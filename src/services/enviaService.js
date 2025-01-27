@@ -354,6 +354,9 @@ export const createShipment = async ({ products, selectedRate, shippingData }) =
     if (!response.data?.data) {
       throw new Error('Respuesta inválida del servidor');
     }
+    if (response.data?.data[0]?.error) {
+      throw new Error('Por favor, verifica los datos de envío o intenta con otra tarifa');
+    }
     const shipment = response.data.data[0];
 
     return {
