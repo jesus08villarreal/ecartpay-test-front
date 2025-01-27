@@ -349,14 +349,22 @@ export const createShipment = async ({ products, selectedRate, shippingData }) =
 
     console.log('Payload para generación de etiqueta:', payload);
     const response = await enviaApi.post('/ship/generate', payload);
-    console.log('Respuesta de generación de etiqueta:', response.data.data[0]);
+    console.log('Respuesta de generación de etiqueta:', response?.data);
 
-    if (!response.data?.data) {
-      throw new Error('Respuesta inválida del servidor');
+    // Primero verificamos si hay errores en cualquier nivel de la respuesta
+    if (response?.data?.meta?.error || 
+        response?.data?.error ||
+        (response?.data?.data && response.data.data[0]?.error)) {
+      console.error('Error específico de Envia:', response.data);
+      throw new Error('Intenta con otra tarifa, o intenta más tarde');
     }
-    if (response.data?.data[0]?.error) {
-      throw new Error('Por favor, verifica los datos de envío o intenta con otra tarifa');
+
+    // Luego verificamos si tenemos los datos necesarios
+    if (!response?.data?.data?.[0]) {
+      console.error('Respuesta sin datos:', response?.data);
+      throw new Error('Intenta con otra tarifa, o intenta más tarde');
     }
+
     const shipment = response.data.data[0];
 
     return {
