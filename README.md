@@ -11,6 +11,56 @@ Frontend de la aplicación EcartPay, una plataforma de comercio electrónico des
 - 💳 Proceso de checkout
 - 📱 Diseño responsive
 
+## Datos de Prueba Envia.com
+
+Los siguientes datos están hardcodeados para las pruebas con la API de Envia.com:
+
+### Dirección de Origen (Remitente)
+```json
+# Start of Selection
+{
+  "name": "Nombre de la Tienda",
+  "company": "Nombre de la Empresa",
+  "email": "correo@tienda.com",
+  "phone": "1234567890",
+  "street": "Calle Principal",
+  "number": "123",
+  "district": "",
+  "city": "Monterrey",
+  "state": "NL",
+  "country": "MX",
+  "postalCode": "64000",
+  "reference": ""
+}
+```
+
+### Configuración del Paquete
+```json
+### Estos datos estan hardcodeados para pruebas.
+{
+  "content": "Mercancía en general",
+  "amount": 1,
+  "type": "box",
+  "weight": 1,
+  "insurance": 0,
+  "declaredValue": 0,
+  "weightUnit": "kg",
+  "lengthUnit": "cm",
+  "dimensions": {
+    "length": 30,
+    "width": 30,
+    "height": 30
+  }
+}
+```
+
+### Carriers Disponibles
+- Estafeta
+- FedEx
+- DHL
+- UPS
+- Redpack
+
 ## Requisitos Previos
 
 - Node.js (v14 o superior)
