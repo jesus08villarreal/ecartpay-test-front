@@ -1,4 +1,4 @@
-# EcartPay - Frontend
+# EcartPay - test - Frontend
 
 Frontend de la aplicación EcartPay, una plataforma de comercio electrónico desarrollada con Vue.js y Vuetify.
 
@@ -114,7 +114,7 @@ Crea los archivos `.env.development` y `.env` según corresponda:
 ```env
 VUE_APP_API_URL=http://localhost:5000/api/v1
 VUE_APP_ENVIA_API_URL=https://api.envia.com
-VUE_APP_ENVIA_TOKEN=8af188fb1b693a0f30ca40a2634208be6753d79e36e48bf5351cce83c324e9c0
+VUE_APP_ENVIA_TOKEN=abc123
 VUE_APP_GEOCODES_API_URL=https://geocodes.envia.com
 VUE_APP_PRODUCTS_API_KEY=RANDOM_API_KEY_123456
 
