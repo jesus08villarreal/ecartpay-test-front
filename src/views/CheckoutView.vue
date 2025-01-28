@@ -671,7 +671,7 @@ export default {
   created() {
     // Recuperar datos de envío si vienen del carrito
     if (this.$route.query) {
-      const { shippingCost, postalCode, selectedRate, shippingRates } = this.$route.query;
+      const { shippingCost, postalCode, selectedRate, shippingRates, shippingAddress } = this.$route.query;
       
       if (shippingCost) {
         this.shippingCost = Number(shippingCost);
@@ -679,8 +679,22 @@ export default {
       
       if (postalCode) {
         this.shippingData.postalCode = postalCode;
-        // Disparar la validación del código postal para obtener la información de la dirección
-        this.handlePostalCodeChange();
+      }
+
+      // Cargar información de la dirección si existe
+      if (shippingAddress) {
+        try {
+          const address = JSON.parse(shippingAddress);
+          this.shippingData = {
+            ...this.shippingData,
+            state: address.state,
+            stateCode: address.stateCode,
+            city: address.city,
+            district: address.district
+          };
+        } catch (error) {
+          console.error('Error al parsear la información de la dirección:', error);
+        }
       }
       
       if (shippingRates) {
@@ -704,6 +718,11 @@ export default {
           this.selectedRate = null;
           this.shippingCost = 0;
         }
+      }
+
+      // Si tenemos código postal pero no tenemos la información completa de la dirección
+      if (postalCode && !shippingAddress) {
+        this.handlePostalCodeChange();
       }
     }
   }

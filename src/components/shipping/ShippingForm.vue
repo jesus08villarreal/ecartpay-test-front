@@ -91,7 +91,7 @@
         :loading="loading"
         :disabled="loading"
       >
-        Enterado
+        Seleccionar
       </v-btn>
     </v-card-actions>
 
@@ -137,6 +137,19 @@ export default {
   },
   methods: {
     handleClose() {
+      const shippingInfo = this.shippingQuotes.length ? {
+        postalCode: this.formData.postalCode,
+        rates: this.shippingQuotes,
+        address: {
+          state: this.formData.state,
+          stateCode: this.formData.stateCode,
+          city: this.formData.city,
+          district: this.formData.district
+        }
+      } : null;
+
+      this.$emit('close', this.selectedQuote, shippingInfo);
+
       this.formData = {
         postalCode: '',
         state: '',
@@ -148,8 +161,6 @@ export default {
       this.selectedQuote = null;
       this.addressInfo = null;
       this.error = null;
-      
-      this.$emit('close');
     },
     async handlePostalCodeChange() {
       if (!/^\d{5}$/.test(this.formData.postalCode)) {

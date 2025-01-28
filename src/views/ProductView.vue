@@ -1,5 +1,19 @@
 <template>
   <v-container class="py-8">
+    <!-- Botón Regresar -->
+    <div class="mb-6">
+      <v-btn
+        color="primary"
+        variant="text"
+        :to="{ name: 'Home' }"
+        class="px-0"
+        size="large"
+      >
+        <v-icon start>mdi-arrow-left</v-icon>
+        Regresar a la tienda
+      </v-btn>
+    </div>
+
     <!-- Loading State -->
     <v-row v-if="loading">
       <v-col cols="12" md="6">
@@ -100,30 +114,113 @@
             </v-list>
 
             <!-- Acciones -->
-            <div class="d-flex align-center justify-space-between gap-4 mt-4">
+            <v-card
+              variant="flat"
+              class="mt-6 pa-6 bg-grey-lighten-4 rounded-lg"
+            >
+              <!-- Cantidad -->
+              <div class="d-flex align-center mb-8">
+                <span class="text-subtitle-1 font-weight-medium mr-4">Cantidad:</span>
+                <v-btn-group
+                  variant="outlined"
+                  color="primary"
+                  rounded="lg"
+                >
+                  <v-btn
+                    icon="mdi-minus"
+                    density="comfortable"
+                    @click="quantity > 1 ? quantity-- : null"
+                    :disabled="quantity <= 1"
+                  ></v-btn>
+                  <v-btn
+                    variant="text"
+                    min-width="48"
+                    class="font-weight-bold"
+                  >
+                    {{ quantity }}
+                  </v-btn>
+                  <v-btn
+                    icon="mdi-plus"
+                    density="comfortable"
+                    @click="quantity < product.stock ? quantity++ : null"
+                    :disabled="quantity >= product.stock"
+                  ></v-btn>
+                </v-btn-group>
+              </div>
+
+              <!-- Botones principales -->
               <v-btn
-                color="primary"
+                color="success"
                 size="x-large"
-                min-width="200"
-                @click="handleAddToCart"
+                block
+                rounded="lg"
+                elevation="2"
+                height="56"
+                class="mb-4 text-button text-uppercase font-weight-bold"
+                @click="handleBuyNow"
                 :disabled="!isAuthenticated || product.stock <= 0"
-                class="flex-grow-1"
               >
-                <v-icon start class="mr-2">mdi-cart-plus</v-icon>
-                {{ getAddToCartButtonText }}
+                <v-icon start size="24" class="mr-2">mdi-cash-register</v-icon>
+                Comprar Ahora
               </v-btn>
 
               <v-btn
                 color="primary"
                 size="x-large"
-                width="64"
-                variant="outlined"
+                block
+                rounded="lg"
+                variant="tonal"
+                height="56"
+                class="mb-6 text-button text-uppercase font-weight-bold"
+                @click="handleAddToCart"
+                :disabled="!isAuthenticated || product.stock <= 0"
+              >
+                <v-icon start size="24" class="mr-2">mdi-cart-plus</v-icon>
+                {{ getAddToCartButtonText }}
+              </v-btn>
+
+              <!-- Separador con línea y texto -->
+              <div class="d-flex align-center mb-6">
+                <v-divider></v-divider>
+                <span class="mx-4 text-caption text-medium-emphasis">o</span>
+                <v-divider></v-divider>
+              </div>
+
+              <!-- Botón de envío -->
+              <v-btn
+                color="grey-darken-1"
+                variant="text"
+                block
+                class="text-none"
                 @click="showShippingForm = true"
                 :disabled="product.stock <= 0"
               >
-                <v-icon>mdi-truck-delivery</v-icon>
+                <v-icon start size="18" class="mr-2">mdi-truck-delivery</v-icon>
+                Calcular costo de envío
               </v-btn>
-            </div>
+
+              <!-- Mensaje de Stock -->
+              <div v-if="product.stock > 0" class="d-flex align-center justify-center mt-6">
+                <v-icon
+                  size="18"
+                  color="success"
+                  class="mr-2"
+                >mdi-check-circle</v-icon>
+                <span class="text-caption text-success">
+                  {{ formatStock(product.stock) }}
+                </span>
+              </div>
+              <div v-else class="d-flex align-center justify-center mt-6">
+                <v-icon
+                  size="18"
+                  color="error"
+                  class="mr-2"
+                >mdi-alert-circle</v-icon>
+                <span class="text-caption text-error">
+                  Producto agotado
+                </span>
+              </div>
+            </v-card>
           </div>
         </v-col>
       </v-row>
@@ -198,7 +295,9 @@ export default {
       message: {
         text: '',
         color: 'success'
-      }
+      },
+      selectedShippingRate: null,
+      shippingInfo: null
     };
   },
   computed: {
@@ -235,6 +334,45 @@ export default {
         // El error se maneja en el store
       }
     },
+    async handleBuyNow() {
+      try {
+        await this.addToCart({
+          product: this.product,
+          quantity: this.quantity
+        });
+        
+        // Preparar la query para el checkout
+        const query = {};
+        
+        // Si hay información de envío seleccionada, incluirla
+        if (this.selectedShippingRate) {
+          query.shippingCost = this.selectedShippingRate.amount.toString();
+          query.selectedRate = JSON.stringify(this.selectedShippingRate);
+        }
+        
+        if (this.shippingInfo) {
+          query.postalCode = this.shippingInfo.postalCode;
+          query.shippingRates = JSON.stringify(this.shippingInfo.rates);
+          
+          // Incluir la información de la dirección si existe
+          if (this.shippingInfo.address) {
+            query.shippingAddress = JSON.stringify(this.shippingInfo.address);
+          }
+        }
+
+        // Redirigir al checkout con la información
+        this.$router.push({
+          name: 'Checkout',
+          query
+        });
+      } catch (error) {
+        this.message = {
+          text: error.message || 'Error al procesar la compra',
+          color: 'error'
+        };
+        this.showMessage = true;
+      }
+    },
     async handleAddToCart() {
       try {
         await this.addToCart({
@@ -254,7 +392,9 @@ export default {
         this.showMessage = true;
       }
     },
-    handleShippingClose() {
+    handleShippingClose(selectedRate, shippingInfo) {
+      this.selectedShippingRate = selectedRate;
+      this.shippingInfo = shippingInfo;
       this.showShippingForm = false;
     },
     formatPrice(price) {
@@ -305,5 +445,14 @@ export default {
 
 .v-list-item {
   min-height: 64px;
+}
+
+/* Animación para el botón de regreso */
+.v-btn.px-0 {
+  transition: transform 0.2s ease-in-out;
+}
+
+.v-btn.px-0:hover {
+  transform: translateX(-4px);
 }
 </style> 
