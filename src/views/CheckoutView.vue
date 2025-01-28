@@ -670,15 +670,41 @@ export default {
   },
   created() {
     // Recuperar datos de envío si vienen del carrito
-    const { shippingCost, postalCode, selectedRate } = this.$route.params;
-    if (shippingCost) {
-      this.shippingCost = Number(shippingCost);
-    }
-    if (postalCode) {
-      this.shippingData.postalCode = postalCode;
-    }
-    if (selectedRate) {
-      this.selectedRate = JSON.parse(selectedRate);
+    if (this.$route.query) {
+      const { shippingCost, postalCode, selectedRate, shippingRates } = this.$route.query;
+      
+      if (shippingCost) {
+        this.shippingCost = Number(shippingCost);
+      }
+      
+      if (postalCode) {
+        this.shippingData.postalCode = postalCode;
+        // Disparar la validación del código postal para obtener la información de la dirección
+        this.handlePostalCodeChange();
+      }
+      
+      if (shippingRates) {
+        try {
+          this.shippingRates = JSON.parse(shippingRates);
+          console.log('Tarifas de envío cargadas:', this.shippingRates);
+        } catch (error) {
+          console.error('Error al parsear las tarifas de envío:', error);
+          this.shippingRates = [];
+        }
+      }
+      
+      if (selectedRate) {
+        try {
+          this.selectedRate = JSON.parse(selectedRate);
+          console.log('Tarifa seleccionada cargada:', this.selectedRate);
+          // Asegurarnos que el costo de envío se actualice
+          this.shippingCost = this.selectedRate.amount;
+        } catch (error) {
+          console.error('Error al parsear la tarifa seleccionada:', error);
+          this.selectedRate = null;
+          this.shippingCost = 0;
+        }
+      }
     }
   }
 };

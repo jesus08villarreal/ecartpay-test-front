@@ -144,7 +144,7 @@
               <!-- Tarifas de Envío -->
               <v-expand-transition>
                 <div v-if="shippingRates.length" class="mt-4">
-                  <div class="text-subtitle-1 mb-2">Selecciona un servicio de envío:</div>
+                  <div class="text-subtitle-1 mb-2">Opciones de Envío:</div>
                   <v-radio-group
                     v-model="selectedRate"
                     @update:modelValue="selectRate"
@@ -156,20 +156,13 @@
                       :value="rate"
                     >
                       <template v-slot:label>
-                        <div class="d-flex justify-space-between align-center w-100">
-                          <div>
-                            <v-icon
-                              :icon="rate.carrier === 'fedex' ? 'mdi-truck-fast' : 'mdi-airplane'"
-                              start
-                              size="small"
-                            ></v-icon>
-                            {{ rate.carrier.toUpperCase() }} - {{ rate.service }}
-                            <div class="text-caption text-medium-emphasis">
-                              Entrega estimada: {{ rate.days }} días
-                            </div>
+                        <div>
+                          <strong>{{ rate.carrier.toUpperCase() }} - {{ rate.description }}</strong>
+                          <div class="text-subtitle-2">
+                            Entrega estimada: {{ rate.deliveryEstimate }}
                           </div>
-                          <div class="text-subtitle-2 font-weight-bold">
-                            {{ formatPrice(rate.amount) }}
+                          <div class="text-subtitle-2">
+                            {{ formatPrice(rate.amount) }} {{ rate.currency }}
                           </div>
                         </div>
                       </template>
@@ -349,14 +342,20 @@ export default {
       this.shippingCost = rate.amount;
     },
     proceedToCheckout() {
-      this.$router.push({ 
-        name: 'Checkout',
-        params: {
-          shippingCost: this.shippingCost,
+      const route = {
+        name: 'Checkout'
+      };
+
+      if (this.shippingRates.length > 0 && this.selectedRate) {
+        route.query = {
+          shippingCost: this.shippingCost.toString(),
           postalCode: this.shippingData.postalCode,
-          selectedRate: this.selectedRate ? JSON.stringify(this.selectedRate) : null
-        }
-      });
+          selectedRate: JSON.stringify(this.selectedRate),
+          shippingRates: JSON.stringify(this.shippingRates)
+        };
+      }
+
+      this.$router.push(route);
       this.$emit('update:modelValue', false);
     }
   }
