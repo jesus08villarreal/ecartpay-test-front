@@ -641,7 +641,6 @@ export default {
         // Guardamos los detalles del envío y mostramos el diálogo
         
         this.shipmentDetails = shipmentResult.shipment;
-        console.log('shipmentDetails', this.shipmentDetails);
         this.showConfirmationDialog = true;
 
         // Aquí iría la lógica de procesamiento del pago
@@ -700,7 +699,6 @@ export default {
       if (shippingRates) {
         try {
           this.shippingRates = JSON.parse(shippingRates);
-          console.log('Tarifas de envío cargadas:', this.shippingRates);
         } catch (error) {
           console.error('Error al parsear las tarifas de envío:', error);
           this.shippingRates = [];
@@ -710,7 +708,6 @@ export default {
       if (selectedRate) {
         try {
           this.selectedRate = JSON.parse(selectedRate);
-          console.log('Tarifa seleccionada cargada:', this.selectedRate);
           // Asegurarnos que el costo de envío se actualice
           this.shippingCost = this.selectedRate.amount;
         } catch (error) {

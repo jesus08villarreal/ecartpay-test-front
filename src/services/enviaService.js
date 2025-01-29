@@ -37,7 +37,6 @@ export const validateAddress = async (address) => {
     }
 
     const data = response.data[0];
-    console.log(data);
     // Si la dirección es válida, retornamos los datos normalizados
     return {
       success: true,
@@ -178,7 +177,6 @@ export const calculateShipping = async ({ postalCode, products }) => {
     }
 
     const packageDetails = calculatePackageDetails(products);
-    console.log(packageDetails);
 
     // Construir el payload según la documentación de Envia
     const payload = {
@@ -347,9 +345,7 @@ export const createShipment = async ({ products, selectedRate, shippingData }) =
       }
     };
 
-    console.log('Payload para generación de etiqueta:', payload);
     const response = await enviaApi.post('/ship/generate', payload);
-    console.log('Respuesta de generación de etiqueta:', response?.data);
 
     // Primero verificamos si hay errores en cualquier nivel de la respuesta
     if (response?.data?.meta?.error || 

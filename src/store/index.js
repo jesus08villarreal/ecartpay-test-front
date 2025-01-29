@@ -193,8 +193,6 @@ export default createStore({
       commit('CLEAR_ERROR');
       
       try {
-        console.log('Fetching products...');
-        console.log(process.env.VUE_APP_PRODUCTS_API_KEY);
         const response = await productsApi.get('/products');
         commit('SET_PRODUCTS', response.data);
       } catch (error) {
